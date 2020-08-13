@@ -1,0 +1,21 @@
+{
+  "name": "gql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-micro": "^2.16.1",
+    "axios": "^0.19.2",
+    "graphql-parse-resolve-info": "^4.7.0"
+  },
+  "devDependencies": {
+    "prettier": "2.0.5",
+    "vercel": "^19.2.0"
+  }
+}
