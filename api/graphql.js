@@ -1,5 +1,10 @@
 import { ApolloServer, gql } from 'apollo-server-micro'
-import { accounts, transactions } from './_resolvers'
+import {
+  accounts,
+  transactions,
+  accountTransactions,
+  transactionAccount,
+} from './_resolvers'
 import { Account, Transaction, Amount } from './_types'
 import { TransactionAPI, AccountAPI } from './_datasources'
 
@@ -18,6 +23,12 @@ const resolvers = {
   Query: {
     accounts,
     transactions,
+  },
+  Account: {
+    transactions: accountTransactions,
+  },
+  Transaction: {
+    account: transactionAccount,
   },
 }
 
