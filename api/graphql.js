@@ -1,6 +1,7 @@
 import { ApolloServer, gql } from 'apollo-server-micro'
 import { accounts, transactions } from './_resolvers'
 import { Account, Transaction, Amount } from './_types'
+import { TransactionAPI, AccountAPI } from './_datasources'
 
 const typeDefs = gql`
   ${Amount}
@@ -23,6 +24,10 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  dataSources: () => ({
+    transactionAPI: new TransactionAPI(),
+    accountAPI: new AccountAPI(),
+  }),
   context: ({ req }) => {
     const token = req.headers.authorization
     if (!token)

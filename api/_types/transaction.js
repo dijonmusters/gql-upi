@@ -4,6 +4,7 @@ const types = `
     status: String
     description: String
     amount: Amount
+    account: Account
   }
 `
 

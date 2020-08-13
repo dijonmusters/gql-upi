@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-datasource-rest": "^0.9.3",
     "apollo-server-micro": "^2.16.1",
     "axios": "^0.19.2",
     "graphql-parse-resolve-info": "^4.7.0"

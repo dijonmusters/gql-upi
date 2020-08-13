@@ -1,24 +1,24 @@
-import axios from 'axios'
-import { baseUrl, getOptions } from '../_utils/request'
+import { parseResolveInfo } from 'graphql-parse-resolve-info'
 
-const transformTransactions = (transactions) =>
-  transactions.map((transaction) => ({
-    id: transaction.id,
-    status: transaction.attributes.status,
-    description: transaction.attributes.description,
-    amount: {
-      currencyCode: transaction.attributes.amount.currencyCode,
-      value: transaction.attributes.amount.value,
-      valueInBaseUnits: transaction.attributes.amount.valueInBaseUnits,
-    },
-    createdAt: transaction.attributes.createdAt,
-  }))
+const transactions = async (parent, args, { dataSources }, info) => {
+  const allTransactions = await dataSources.transactionAPI.all()
 
-const transactions = async (parent, args, context, info) => {
-  const { token } = context
-  const { data } = await axios.get(`${baseUrl}/transactions`, getOptions(token))
-  const transactions = transformTransactions(data.data)
-  return transactions
+  if (parseResolveInfo(info).fieldsByTypeName.Transaction.account) {
+    return await Promise.all(
+      allTransactions.map(async (transaction) => {
+        const account = await dataSources.accountAPI.forTransaction(
+          transaction.id
+        )
+
+        return {
+          ...transaction,
+          account,
+        }
+      })
+    )
+  }
+
+  return allTransactions
 }
 
 export { transactions }
