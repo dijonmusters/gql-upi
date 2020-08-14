@@ -43,6 +43,44 @@ class TransactionAPI extends RESTDataSource {
     const response = await this.get(`/accounts/${id}/transactions`)
     return response.data.map(this.transform)
   }
+
+  async forTag(id) {
+    const response = await this.get(`/transactions?filter[tag]=${id}`)
+    return response.data.map(this.transform)
+  }
+
+  async addTags(id, tags) {
+    const body = {
+      data: tags.map((tag) => ({
+        type: 'tags',
+        id: tag,
+      })),
+    }
+
+    try {
+      await this.post(`/transactions/${id}/relationships/tags`, body)
+      return await this.find(id)
+    } catch (e) {
+      return null
+    }
+  }
+
+  async removeTags(id, tags) {
+    // TODO: Fix this endpoint - returning 422 unprocessable entity
+    const body = {
+      data: tags.map((tag) => ({
+        type: 'tags',
+        id: tag,
+      })),
+    }
+
+    try {
+      await this.delete(`/transactions/${id}/relationships/tags`, body)
+      return await this.find(id)
+    } catch (e) {
+      return null
+    }
+  }
 }
 
 export default TransactionAPI

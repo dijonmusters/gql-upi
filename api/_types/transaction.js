@@ -5,6 +5,7 @@ const types = `
     description: String
     amount: Amount
     account: Account
+    tags: [Tag]
   }
 `
 

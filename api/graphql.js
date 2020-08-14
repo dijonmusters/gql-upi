@@ -5,18 +5,25 @@ import {
   transactions,
   transaction,
   accountTransactions,
+  transactionTags,
   transactionAccount,
   categories,
   category,
+  tags,
+  tag,
+  tagTransactions,
+  addTagsToTransaction,
+  removeTagsFromTransaction,
 } from './_resolvers'
-import { Account, Transaction, Amount, Category } from './_types'
-import { TransactionAPI, AccountAPI, CategoryAPI } from './_datasources'
+import { Account, Transaction, Amount, Category, Tag } from './_types'
+import { TransactionAPI, AccountAPI, CategoryAPI, TagAPI } from './_datasources'
 
 const typeDefs = gql`
   ${Amount}
   ${Account}
   ${Transaction}
   ${Category}
+  ${Tag}
 
   type Query {
     accounts: [Account]
@@ -25,6 +32,13 @@ const typeDefs = gql`
     transaction(id: ID!): Transaction
     categories: [Category]
     category(id: ID!): Category
+    tags: [Tag]
+    tag(id: ID!): Tag
+  }
+
+  type Mutation {
+    addTagsToTransaction(transactionId: ID!, tags: [String]!): Transaction
+    removeTagsFromTransaction(transactionId: ID!, tags: [String]!): Transaction
   }
 `
 
@@ -36,12 +50,22 @@ const resolvers = {
     transaction,
     categories,
     category,
+    tags,
+    tag,
+  },
+  Mutation: {
+    addTagsToTransaction,
+    removeTagsFromTransaction,
   },
   Account: {
     transactions: accountTransactions,
   },
   Transaction: {
     account: transactionAccount,
+    tags: transactionTags,
+  },
+  Tag: {
+    transactions: tagTransactions,
   },
 }
 
@@ -49,6 +73,7 @@ const dataSources = () => ({
   transactionAPI: new TransactionAPI(),
   accountAPI: new AccountAPI(),
   categoryAPI: new CategoryAPI(),
+  tagAPI: new TagAPI(),
 })
 
 const isAuthenticated = ({ req }) => {

@@ -1,6 +1,18 @@
 import { accounts, accountTransactions, account } from './accounts'
-import { transactions, transactionAccount, transaction } from './transactions'
+import {
+  transactions,
+  transactionAccount,
+  transactionTags,
+  transaction,
+} from './transactions'
 import { categories, category } from './categories'
+import {
+  tags,
+  tag,
+  tagTransactions,
+  addTagsToTransaction,
+  removeTagsFromTransaction,
+} from './tags'
 
 export {
   accounts,
@@ -8,7 +20,13 @@ export {
   transactions,
   accountTransactions,
   transactionAccount,
+  transactionTags,
   transaction,
   categories,
   category,
+  tags,
+  tag,
+  tagTransactions,
+  addTagsToTransaction,
+  removeTagsFromTransaction,
 }
