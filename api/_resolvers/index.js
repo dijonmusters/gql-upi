@@ -14,6 +14,14 @@ import {
   removeTagsFromTransaction,
 } from './tags'
 
+import {
+  webhooks,
+  webhook,
+  addWebhook,
+  removeWebhook,
+  pingWebhook,
+} from './webhooks'
+
 export {
   accounts,
   account,
@@ -29,4 +37,9 @@ export {
   tagTransactions,
   addTagsToTransaction,
   removeTagsFromTransaction,
+  webhooks,
+  webhook,
+  addWebhook,
+  removeWebhook,
+  pingWebhook,
 }

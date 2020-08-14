@@ -14,9 +14,20 @@ import {
   tagTransactions,
   addTagsToTransaction,
   removeTagsFromTransaction,
+  webhooks,
+  webhook,
+  addWebhook,
+  removeWebhook,
+  pingWebhook,
 } from './_resolvers'
-import { Account, Transaction, Amount, Category, Tag } from './_types'
-import { TransactionAPI, AccountAPI, CategoryAPI, TagAPI } from './_datasources'
+import { Account, Transaction, Amount, Category, Tag, Webhook } from './_types'
+import {
+  TransactionAPI,
+  AccountAPI,
+  CategoryAPI,
+  TagAPI,
+  WebhookAPI,
+} from './_datasources'
 
 const typeDefs = gql`
   ${Amount}
@@ -24,6 +35,7 @@ const typeDefs = gql`
   ${Transaction}
   ${Category}
   ${Tag}
+  ${Webhook}
 
   type Query {
     accounts: [Account]
@@ -34,11 +46,20 @@ const typeDefs = gql`
     category(id: ID!): Category
     tags: [Tag]
     tag(id: ID!): Tag
+    webhooks: [Webhook]
+    webhook(id: ID!): Webhook
+  }
+
+  type Message {
+    message: String
   }
 
   type Mutation {
     addTagsToTransaction(transactionId: ID!, tags: [String]!): Transaction
     removeTagsFromTransaction(transactionId: ID!, tags: [String]!): Transaction
+    addWebhook(url: String, description: String!): Webhook
+    removeWebhook(id: ID!): Message
+    pingWebhook(id: ID!): Message
   }
 `
 
@@ -52,10 +73,15 @@ const resolvers = {
     category,
     tags,
     tag,
+    webhooks,
+    webhook,
   },
   Mutation: {
     addTagsToTransaction,
     removeTagsFromTransaction,
+    addWebhook,
+    removeWebhook,
+    pingWebhook,
   },
   Account: {
     transactions: accountTransactions,
@@ -74,6 +100,7 @@ const dataSources = () => ({
   accountAPI: new AccountAPI(),
   categoryAPI: new CategoryAPI(),
   tagAPI: new TagAPI(),
+  webhookAPI: new WebhookAPI(),
 })
 
 const isAuthenticated = ({ req }) => {
