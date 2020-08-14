@@ -1,5 +1,6 @@
 import { accounts, accountTransactions, account } from './accounts'
 import { transactions, transactionAccount, transaction } from './transactions'
+import { categories, category } from './categories'
 
 export {
   accounts,
@@ -8,4 +9,6 @@ export {
   accountTransactions,
   transactionAccount,
   transaction,
+  categories,
+  category,
 }

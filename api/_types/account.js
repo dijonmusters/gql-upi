@@ -10,5 +10,3 @@ const types = `
 `
 
 export default types
-
-// TODO: add transactions relationship

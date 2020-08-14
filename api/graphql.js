@@ -6,20 +6,25 @@ import {
   transaction,
   accountTransactions,
   transactionAccount,
+  categories,
+  category,
 } from './_resolvers'
-import { Account, Transaction, Amount } from './_types'
-import { TransactionAPI, AccountAPI } from './_datasources'
+import { Account, Transaction, Amount, Category } from './_types'
+import { TransactionAPI, AccountAPI, CategoryAPI } from './_datasources'
 
 const typeDefs = gql`
   ${Amount}
   ${Account}
   ${Transaction}
+  ${Category}
 
   type Query {
     accounts: [Account]
     account(id: ID!): Account
     transactions: [Transaction]
     transaction(id: ID!): Transaction
+    categories: [Category]
+    category(id: ID!): Category
   }
 `
 
@@ -29,6 +34,8 @@ const resolvers = {
     account,
     transactions,
     transaction,
+    categories,
+    category,
   },
   Account: {
     transactions: accountTransactions,
@@ -41,6 +48,7 @@ const resolvers = {
 const dataSources = () => ({
   transactionAPI: new TransactionAPI(),
   accountAPI: new AccountAPI(),
+  categoryAPI: new CategoryAPI(),
 })
 
 const isAuthenticated = ({ req }) => {
