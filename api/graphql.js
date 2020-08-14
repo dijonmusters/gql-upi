@@ -1,7 +1,9 @@
 import { ApolloServer, gql } from 'apollo-server-micro'
 import {
   accounts,
+  account,
   transactions,
+  transaction,
   accountTransactions,
   transactionAccount,
 } from './_resolvers'
@@ -15,14 +17,18 @@ const typeDefs = gql`
 
   type Query {
     accounts: [Account]
+    account(id: ID!): Account
     transactions: [Transaction]
+    transaction(id: ID!): Transaction
   }
 `
 
 const resolvers = {
   Query: {
     accounts,
+    account,
     transactions,
+    transaction,
   },
   Account: {
     transactions: accountTransactions,
@@ -32,21 +38,25 @@ const resolvers = {
   },
 }
 
+const dataSources = () => ({
+  transactionAPI: new TransactionAPI(),
+  accountAPI: new AccountAPI(),
+})
+
+const isAuthenticated = ({ req }) => {
+  const token = req.headers.authorization
+  if (!token)
+    throw new Error(
+      'You must provide a personal access token: https://api.up.com.au/getting_started'
+    )
+  return { token }
+}
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  dataSources: () => ({
-    transactionAPI: new TransactionAPI(),
-    accountAPI: new AccountAPI(),
-  }),
-  context: ({ req }) => {
-    const token = req.headers.authorization
-    if (!token)
-      throw new Error(
-        'You must provide a personal access token: https://api.up.com.au/getting_started'
-      )
-    return { token }
-  },
+  dataSources,
+  context: isAuthenticated,
 })
 
 const handler = server.createHandler()

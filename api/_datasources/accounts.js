@@ -31,8 +31,12 @@ class AccountAPI extends RESTDataSource {
   }
 
   async find(id) {
-    const response = await this.get(`/accounts/${id}`)
-    return this.transform(response.data)
+    try {
+      const response = await this.get(`/accounts/${id}`)
+      return this.transform(response.data)
+    } catch (e) {
+      return null
+    }
   }
 
   async forTransaction(id) {
